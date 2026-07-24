@@ -8,6 +8,14 @@
 <body>
     <h1>FileShare</h1>
     <form action="/upload" method="POST" enctype="multipart/form-data">
+        <br><br>
+        <p>Uploaded files: </p>
+        <ul>
+        {% for file in files %}
+            <li>{{file.name}}</li>
+            <br>
+        {% endfor %}
+        </ul>
         <label for="file">Upload your file: </label>
         <br><br>
         <input type="file" name="file">
