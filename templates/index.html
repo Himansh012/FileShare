@@ -12,8 +12,13 @@
         <p>Uploaded files: </p>
         <ul>
         {% for file in files %}
-            <li>{{file.name}}</li>
-            <br>
+            <li>
+
+            <a href="{{url_for('download', filename=file.name)}}">
+                {{file.name}}
+            </a>
+            
+            </li>
         {% endfor %}
         </ul>
         <label for="file">Upload your file: </label>
