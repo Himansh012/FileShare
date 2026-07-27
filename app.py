@@ -20,22 +20,25 @@ def home():
 
 @app.route("/upload", methods = ["POST"])
 def upload():
-    uploaded_file = request.files.get("file")
-    if uploaded_file is None:
-        return "No file field found."
-    if not uploaded_file.filename:
-        return "Please upload a file."
-    
-    filename = secure_filename(uploaded_file.filename)
-    filename = f"{int(time.time())}_{filename}"
+    uploaded_file_list = []
+    uploaded_files = request.files.getlist("file")
+    if not uploaded_files:
+        return "No files uploaded"
+    for uploaded_file in uploaded_files:
+        if not uploaded_file.filename:
+            continue
+        
+        filename = secure_filename(uploaded_file.filename)
+        filename = f"{int(time.time())}_{filename}"
 
-    destination = UPLOAD_FOLDER / filename
-    uploaded_file.save(destination)
+        destination = UPLOAD_FOLDER / filename
+        uploaded_file.save(destination)
+        uploaded_file_list.append(uploaded_file.filename)
 
     return render_template(
                             "success.html",
-                            file_name = uploaded_file.filename
-                           )
+                            files = uploaded_file_list
+                        )
 
 @app.route("/download/<filename>", methods = ["GET"])
 def download(filename):

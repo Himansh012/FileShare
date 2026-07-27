@@ -7,7 +7,13 @@
 </head>
 <body>
     <h4>Success !!</h4>
-    <p>Your file {{file_name}} was uploaded Successfully.</p>
+    <p>Your file(s)</p>
+        <ul>
+         {% for file in files %}
+         <li>{{file}}</li>
+         {% endfor %}
+        </ul>
+        <p>were uploaded Successfully.</p>
     <br><br>
     <a href="{{url_for('home')}}">Home Page</a>
 </body>
