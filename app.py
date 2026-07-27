@@ -20,7 +20,7 @@ def home():
 
 @app.route("/upload", methods = ["POST"])
 def upload():
-    uploaded_file_list = []
+    uploaded_filenames = []
     uploaded_files = request.files.getlist("file")
     if not uploaded_files:
         return "No files uploaded"
@@ -33,11 +33,13 @@ def upload():
 
         destination = UPLOAD_FOLDER / filename
         uploaded_file.save(destination)
-        uploaded_file_list.append(uploaded_file.filename)
+        uploaded_filenames.append(uploaded_file.filename)
 
+    if not uploaded_filenames:
+        return "No files uploaded."
     return render_template(
                             "success.html",
-                            files = uploaded_file_list
+                            files = uploaded_filenames
                         )
 
 @app.route("/download/<filename>", methods = ["GET"])
