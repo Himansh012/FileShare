@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, send_file, abort
 from pathlib import Path
 from werkzeug.utils import secure_filename
-import time
+import uuid
 
 app = Flask(__name__)
 
@@ -10,13 +10,21 @@ UPLOAD_FOLDER.mkdir(exist_ok=True)
 
 @app.route("/")
 def home():
-    return render_template(
-                            "index.html",
-                            files = [
-                                file 
-                                for file in UPLOAD_FOLDER.iterdir()
-                                  if file.is_file() and not file.name.startswith(".")]
-                           )
+
+    files = []
+
+    for file in UPLOAD_FOLDER.iterdir():
+        if not file.is_file() or file.name.startswith("."):
+            continue
+
+        original_file = file.name.split("_",1)[1]
+
+        files.append({
+            "stored_name":file.name,
+            "original_name":original_file
+        })
+
+    return render_template("index.html",files=files)
 
 @app.route("/upload", methods = ["POST"])
 def upload():
@@ -27,13 +35,14 @@ def upload():
     for uploaded_file in uploaded_files:
         if not uploaded_file.filename:
             continue
-        
-        filename = secure_filename(uploaded_file.filename)
-        filename = f"{int(time.time())}_{filename}"
 
-        destination = UPLOAD_FOLDER / filename
+        unique_id = uuid.uuid4()
+        original_filename = secure_filename(uploaded_file.filename)
+        stored_filename = f"{unique_id}_{original_filename}"
+
+        destination = UPLOAD_FOLDER / stored_filename
         uploaded_file.save(destination)
-        uploaded_filenames.append(uploaded_file.filename)
+        uploaded_filenames.append(original_filename)
 
     if not uploaded_filenames:
         return "No files uploaded."
@@ -44,11 +53,17 @@ def upload():
 
 @app.route("/download/<filename>", methods = ["GET"])
 def download(filename):
+
     destination = UPLOAD_FOLDER / filename
+
+    original_name = destination.name.split("_",1)[1]
+
     if not destination.is_file():
         abort(404)
     return send_file(destination,
-                     as_attachment=True)
+                     as_attachment=True,
+                     download_name=original_name
+                     )
 
 
 

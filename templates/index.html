@@ -14,8 +14,8 @@
         {% for file in files %}
             <li>
 
-            <a href="{{url_for('download', filename=file.name)}}">
-                {{file.name}}
+            <a href="{{url_for('download', filename=file.stored_name)}}">
+                {{file.original_name}}
             </a>
             
             </li>
