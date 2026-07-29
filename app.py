@@ -23,7 +23,7 @@ def home():
             "stored_name":file.name,
             "original_name":original_file
         })
-
+        
     return render_template("index.html",files=files)
 
 @app.route("/upload", methods = ["POST"])
@@ -65,6 +65,20 @@ def download(filename):
                      download_name=original_name
                      )
 
+@app.route("/delete/<filename>", methods=["POST"])
+def delete(filename):
+    destination = UPLOAD_FOLDER / filename
+    original_file = filename.split("_",1)[1]
+
+    if not destination.is_file():
+        abort(404)
+    try:
+        destination.unlink()
+    except Exception as e:
+        return f"Deletion failed due to {e}"
+    
+    return render_template("deleted.html", f = original_file)
+    
 
 
 if __name__ == "__main__":

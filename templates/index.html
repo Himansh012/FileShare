@@ -7,20 +7,23 @@
 </head>
 <body>
     <h1>FileShare</h1>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-        <br><br>
-        <p>Uploaded files: </p>
-        <ul>
+    <br><br>
+    <p>Uploaded files: </p>
+    <ul>
         {% for file in files %}
-            <li>
-
+        <li>
+            <form action="/delete/{{file.stored_name}}" method="POST">
             <a href="{{url_for('download', filename=file.stored_name)}}">
                 {{file.original_name}}
             </a>
+            <button type="submit">Delete</button>
+            </form>
             
-            </li>
+        </li>
         {% endfor %}
-        </ul>
+    </ul>
+
+    <form action="/upload" method="POST" enctype="multipart/form-data" id="uploaded-files">
         <label for="file">Upload your file: </label>
         <br><br>
         <input type="file" name="file" multiple>
