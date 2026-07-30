@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FileShare</title>
+    <link rel="stylesheet" href="static\css\style.css">
 </head>
 <body>
     <h1>FileShare</h1>
@@ -12,7 +13,7 @@
     <ul>
         {% for file in files %}
         <li>
-            <form action="/delete/{{file.stored_name}}" method="POST">
+            <form action="/delete/{{file.stored_name}}" method="POST" class="delete-form">
             <a href="{{url_for('download', filename=file.stored_name)}}">
                 {{file.original_name}}
             </a>
