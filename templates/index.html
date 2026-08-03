@@ -44,22 +44,22 @@
 
         {% endif %}
 
-    </div>
-    
-    <div class="upload-section">
         
-        <h2>Upload File</h2>
-
-        <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data" id="uploaded-form">
+        <div class="upload-section">
             
-            <input 
-            id="file-input"
-            type="file" 
-            name="file"
-            multiple>    
-            <button type="submit">Upload</button>    
-    
-        </form>
+            <h2>Upload File</h2>
+            
+            <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data" id="uploaded-form">
+                
+                <input 
+                id="file-input"
+                type="file" 
+                name="file"
+                multiple>    
+                <button type="submit">Upload</button>    
+                
+            </form>
+        </div>
     </div>
     
 </div>
