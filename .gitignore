@@ -2,3 +2,4 @@ venv/
 uploads/
 fileshare.db
 __pycache__/
+test.py
