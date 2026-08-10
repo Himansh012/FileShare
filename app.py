@@ -10,11 +10,12 @@ app = Flask(__name__)
 UPLOAD_FOLDER = Path("uploads")
 UPLOAD_FOLDER.mkdir(exist_ok=True)
 
+''' Cleanup function: To register a callback, whenever the application is torn down, call database.close_db() '''
+app.teardown_appcontext(database.close_db)      
+
 with app.app_context():
     database.init_db()
 
-''' Cleanup function: To register a callback, whenever the application is torn down, call database.close_db() '''
-app.teardown_appcontext(database.close_db)      
 
 @app.route("/")
 def home():
@@ -28,6 +29,7 @@ def home():
 @app.route("/upload", methods = ["POST"])
 def upload():
     uploaded_filenames = []
+    failed_filenames = []
     uploaded_files = request.files.getlist("file")
 
     if not uploaded_files:
@@ -39,36 +41,44 @@ def upload():
         unique_id = uuid.uuid4()
         original_filename = secure_filename(uploaded_file.filename)
         stored_filename = f"{unique_id}_{original_filename}"
-
         destination = UPLOAD_FOLDER / stored_filename
 
-        uploaded_file.save(destination)
-        uploaded_filenames.append(original_filename)
-        upload_time = datetime.now().isoformat()
-        size = destination.stat().st_size
+        try:
+            upload_time = datetime.now().isoformat()
+            uploaded_file.save(destination)
         
-        database.create_file(str(unique_id),
-                            original_filename,
-                            stored_filename,
-                            upload_time,
-                            size)    
+            size = destination.stat().st_size
+            database.create_file(str(unique_id),
+                                original_filename,
+                                stored_filename,
+                                upload_time,
+                                size)    
+            uploaded_filenames.append(original_filename)
+        except Exception:
+            if(destination.isfile()):
+                destination.unlink()
+            failed_filenames.append(original_filename)
 
     if not uploaded_filenames:
         return "No files uploaded."
 
     return render_template(
                             "success.html",
-                            files = uploaded_filenames
+                            uploaded_files = uploaded_filenames,
+                            failed_files = failed_filenames
                         )
 
 @app.route("/download/<stored_filename>", methods = ["GET"])
 def download(stored_filename):
 
     file = database.get_file(stored_filename)
-    if not file:
+    if file is None:
         abort(404)
 
     destination = UPLOAD_FOLDER / file["stored_filename"]
+    if not destination.is_file():
+        abort(404)
+
     return send_file(destination,
                      as_attachment=True,
                      download_name=file["original_filename"]

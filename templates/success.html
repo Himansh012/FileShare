@@ -9,12 +9,20 @@
     <h4>Success !!</h4>
     <p>Your file(s)</p>
         <ul>
-         {% for file in files %}
+         {% for file in uploaded_files %}
          <li>{{file}}</li>
          {% endfor %}
         </ul>
         <p>were uploaded Successfully.</p>
-    <br><br>
+        <br><br>
+        {% if failed_filenames %}
+    <h4>These files failed.</h4>
+    <ul>
+        {% for file in failed_filenames %}
+        <li>{{file}}</li>
+        {% endfor %} 
+    </ul>
+    {% endif %}
     <a href="{{url_for('home')}}">Home Page</a>
 </body>
 </html>
