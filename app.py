@@ -6,9 +6,11 @@ import database
 from datetime import datetime
 
 app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 100*1024*1024
 
 UPLOAD_FOLDER = Path("uploads")
 UPLOAD_FOLDER.mkdir(exist_ok=True)
+
 
 ''' Cleanup function: To register a callback, whenever the application is torn down, call database.close_db() '''
 app.teardown_appcontext(database.close_db)      
@@ -31,6 +33,14 @@ def upload():
     uploaded_filenames = []
     failed_filenames = []
     uploaded_files = request.files.getlist("file")
+    if len(uploaded_files)>10:
+            return render_template(
+                "errors/error.html",
+                error_code=400,
+                error_type="File Limit Exceeded",
+                message=f"Please upload upto 10 files at a time."
+            ), 400
+
 
     if not uploaded_files:
         return "No files uploaded"
@@ -73,11 +83,22 @@ def download(stored_filename):
 
     file = database.get_file(stored_filename)
     if file is None:
-        abort(404)
+        return render_template(
+            "errors/error.html",
+            error_code=404,
+            error_type="Upload Failed, File Not Found",
+            message=f"The requested file, {stored_filename}, was not found in the Database."
+        ), 404
 
     destination = UPLOAD_FOLDER / file["stored_filename"]
     if not destination.is_file():
-        abort(404)
+            return render_template(
+                "errors/error.html",
+                error_code=404,
+                error_type="File Not Found",
+                message=f"The requested file, {stored_filename}, was not found in the system."
+            ), 404
+
 
     return send_file(destination,
                      as_attachment=True,
@@ -89,20 +110,37 @@ def delete(stored_filename):
 
     file = database.get_file(stored_filename)
     if file is None:
-        abort(404)
+            return render_template(
+                "errors/error.html",
+                error_code=404,
+                error_type="Deletion Failed",
+                message=f"The requested file, {stored_filename}, was not found in the system."
+            ), 404
+
     
     destination = UPLOAD_FOLDER / file["stored_filename"]
     if not destination.is_file():
-        abort(404)
+            return render_template(
+                "errors/error.html",
+                error_code=404,
+                error_type="Deletion failed, destination invalid",
+                message=f"The requested file, {stored_filename}, was not found in the system."
+            ), 404
+
     try:
         destination.unlink()
         database.delete_file(stored_filename)
-    except Exception as e:
-        return f"Deletion failed due to {e}"
+    except Exception:
+            return render_template(
+                "errors/error.html",
+                error_code=500  ,
+                error_type="Some Error Occured",
+                message=f"The requested file, {stored_filename}, could not be deleted"
+            ), 500
+
     
     return render_template("deleted.html", f = file["original_filename"])
     
-
 
 if __name__ == "__main__":
     app.run(debug=True)
