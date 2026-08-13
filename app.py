@@ -70,7 +70,12 @@ def upload():
 
 
     if not uploaded_files:
-        return "No files uploaded"
+        return render_template(
+             "errors/error.html",
+             error_code = 400,
+             error_type = "No files uploaded",
+             message = "Please select one file to upload."
+        ), 400
     for uploaded_file in uploaded_files:
         if not uploaded_file.filename:
             continue
@@ -97,7 +102,12 @@ def upload():
             failed_filenames.append(original_filename)
 
     if not uploaded_filenames:
-        return "No files uploaded."
+        return render_template(
+                     "errors/error.html",
+                     error_code = 400,
+                     error_type = "No files uploaded",
+                     message = "Please select one file to upload."
+                ), 400
 
     return render_template(
                             "success.html",
