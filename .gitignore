@@ -4,3 +4,4 @@ fileshare.db
 __pycache__/
 test.py
 templates/test.html
+FileSharevenvScriptsactivate.bat
