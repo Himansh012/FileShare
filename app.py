@@ -101,14 +101,6 @@ def upload():
                 destination.unlink()
             failed_filenames.append(original_filename)
 
-    if not uploaded_filenames:
-        return render_template(
-                     "errors/error.html",
-                     error_code = 400,
-                     error_type = "No files uploaded",
-                     message = "Please select one file to upload."
-                ), 400
-
     return render_template(
                             "success.html",
                             uploaded_files = uploaded_filenames,
