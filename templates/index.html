@@ -18,11 +18,11 @@
 
             {% for file in files %}
                 <div class="file-list">
-                <a href="{{url_for('download', stored_filename = file.stored_filename)}}">
+                <a href="{{url_for('routes.download', stored_filename = file.stored_filename)}}">
                     {{file.original_filename}}
                 </a>
                 <form class="delete-form"
-                action="{{url_for('delete', stored_filename = file.stored_filename)}}" 
+                action="{{url_for('routes.delete', stored_filename = file.stored_filename)}}" 
                 method="POST">
                 <button type="submit">
                     Delete
@@ -43,7 +43,7 @@
             
             <h2>Upload File</h2>
             
-            <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data" id="uploaded-form">
+            <form action="{{ url_for('routes.upload') }}" method="POST" enctype="multipart/form-data" id="uploaded-form">
                 
                 <input 
                 id="file-input"
@@ -56,6 +56,5 @@
         </div>
     </div>
     
-</div>
 </body>
 </html>
