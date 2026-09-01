@@ -7,8 +7,9 @@ for uploaded file metadata.
 
 import sqlite3
 from flask import g
+import config
 
-DATABASE = "fileshare.db"
+DATABASE = config.DATABASE
 
 def get_db():
 

@@ -4,9 +4,11 @@ from werkzeug.utils import secure_filename
 import uuid
 import database
 from datetime import datetime
+import config
+
 
 app = Flask(__name__)
-app.config["MAX_CONTENT_LENGTH"] = 100*1024*1024
+app.config["MAX_CONTENT_LENGTH"] = config.MAX_CONTENT_LENGTH
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -35,7 +37,7 @@ def internal_server_error(error):
           message = "Something went wrong while processing your request."
      ), 500
 
-UPLOAD_FOLDER = Path("uploads")
+UPLOAD_FOLDER = config.UPLOAD_FOLDER
 UPLOAD_FOLDER.mkdir(exist_ok=True)
 
 
