@@ -7,3 +7,11 @@ DATABASE = BASE_DIR / "fileshare.db"
 
 MAX_CONTENT_LENGTH = 1024 * 1024 * 1024
 MAX_FILE_PER_UPLOAD = 10
+
+ALLOWED_FILE_TYPES = {
+    ".jpeg": "image/jpeg",
+      ".jpg": "image/jpeg",
+        ".png": "image/png",
+         ".pdf": "application/pdf",
+          ".txt": "text/plain"
+            }
