@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FileShare - {{error_code}}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/error.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="errorheading">
+        <h1>{{error_code}}</h1>
+        <h4>{{error_type}}</h4>
+    </div>
+        <div class="message">
+        {% for file in failed_filenames %}
+        <ul>
+            <li>{{file}} : {{failed_filenames[file]}}</li>
+        </ul>
+        {% endfor %}
+        <a href="{{url_for('routes.home')}}" id="backToHome">Get back to Home Page</a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -6,15 +6,15 @@
 
 body{
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
+    background-color: #2c2a2a;
+    color: #e7f3c4ba;
 }
 
 .container{
     max-width: 700px;
     margin: 40px auto;
     padding: 20px;
-    background: white;
+    background: #717a858e;
     border-radius: 12px;
 }
 
@@ -28,33 +28,32 @@ body{
 
 .file-list{
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.file-item:hover{
+    background-color: #65646783;
+}
+
+.file-item{
+    display: grid;
+    grid-template-columns: 1fr 100px auto auto;
+    gap: 10px;
     align-items: center;
 
     padding: 12px 10px;
     border-bottom: 1px solid #ddd;
 
     border-radius: 6px;
-    
+
     transition: background-color 500ms;
 }
 
-.file-list:hover{
-    background-color: #f5f5f5;
-}
-
-.file-list a{
-    color: #333;
-    text-decoration: none;
-}
-
-.file-list a:hover{
-    text-decoration: underline;
-}
-
-.delete-form button{
+.fileaction button{
+    margin: auto 6px;
     padding: 8px 12px;
-
+    
     border: none;
     border-radius: 6px;
 
@@ -65,9 +64,10 @@ body{
     transition: background-color 200ms;
 }
 
-.delete-form button:hover{
+.fileaction button:hover{
     background-color: #ddd;
 }
+
 
 
 

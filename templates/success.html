@@ -15,14 +15,24 @@
         </ul>
         <p>were uploaded Successfully.</p>
         <br><br>
-        {% if failed_filenames %}
-    <h4>These files failed.</h4>
+    {% if failed_files %}
+    <h4>These files failed, checkout why: </h4>
     <ul>
-        {% for file in failed_filenames %}
-        <li>{{file}}</li>
+        {% for failedfile in failed_files %}
+        <li>{{failedfile}} : {{failed_files[failedfile]}}</li>
         {% endfor %} 
     </ul>
     {% endif %}
+    <br><br>
+    {% if warned_files %}
+    <h4>Files uploaded with warning: </h4>
+    <ul>
+        {% for warnedfile in warned_files %}
+        <li>{{warnedfile}} : {{warned_files[warnedfile]}}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
     <a href="{{url_for('routes.home')}}">Home Page</a>
 </body>
 </html>
