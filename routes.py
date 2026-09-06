@@ -12,13 +12,7 @@ routes = Blueprint("routes", __name__)
 
 @routes.route("/")
 def home():
-    files = database.list_files()
-    uploaded_folder = [ufile.name for ufile in config.UPLOAD_FOLDER.iterdir() if ufile]
-    
-    for file in files:
-        if file["stored_filename"] not in uploaded_folder:
-            database.delete_file(file["stored_filename"])
-            files.remove(file)
+    files = helper.database_filesystem_cleanup(files)
     return render_template(
         "index.html",
         files=files,
