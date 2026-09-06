@@ -1,4 +1,5 @@
 import database
+from pathlib import Path
 
 def format_size(size):
     units = ["B", "KB", "MB", "GB", "TB"]
@@ -15,7 +16,7 @@ def file_name_incrementer(original_filename):
     db = database.get_db()
     file_count = len(db.execute("SELECT * FROM files WHERE original_filename = ?", (original_filename,)).fetchall())
     if file_count>0:
-        prefix = original_filename.split(".")[0]
-        suffix = original_filename.split(".")[1]
-        original_filename = f"{prefix}({file_count}).{suffix}"
+        original_filename = Path(original_filename)
+        extension = original_filename.suffix.lower()
+        original_filename = f"{original_filename.stem}({file_count}){extension}"
     return original_filename

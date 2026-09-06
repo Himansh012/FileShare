@@ -66,7 +66,6 @@ def upload():
 
         unique_id = uuid.uuid4()
         original_filename = secure_filename(uploaded_file.filename)
-        original_filename = helper.file_name_incrementer(original_filename)
         stored_filename = f"{unique_id}_{original_filename}"
         destination = config.UPLOAD_FOLDER / stored_filename
 
