@@ -85,8 +85,7 @@ def upload():
             if size==0:
                  warned_filenames[uploaded_file.filename] = "File has no content, check the upload carefully"
 
-        except Exception as e:
-            print(e)
+        except Exception:
             if(destination.is_file()):
                 destination.unlink()
             failed_filenames[original_filename] = "File Failed due to some exception"
