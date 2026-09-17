@@ -12,7 +12,7 @@ routes = Blueprint("routes", __name__)
 
 @routes.route("/")
 def home():
-    files = helper.database_filesystem_cleanup(files)
+    files = helper.database_filesystem_synchronization()
     return render_template(
         "index.html",
         files=files,
@@ -130,6 +130,5 @@ def delete(stored_filename):
         database.delete_file(stored_filename)
     except Exception:
             abort(500)
-
     
     return render_template("deleted.html", f = file["original_filename"])

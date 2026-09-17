@@ -29,8 +29,10 @@ def init_db():
             file_uuid TEXT UNIQUE NOT NULL,
             original_filename TEXT NOT NULL,
             stored_filename TEXT UNIQUE NOT NULL,
-            upload_time TEXT NOT NULL,
-            size INTEGER NOT NULL
+            upload_time TEXT,
+            size INTEGER NOT NULL,
+            recovered INTEGER NOT NULL DEFAULT 0 
+            CHECK (recovered IN (0,1))
         )
     """)
 
@@ -43,7 +45,7 @@ def close_db(exception=None):
         db.close()
 
 
-def create_file(file_uuid, original_filename, stored_filename, upload_time, size):
+def create_file(file_uuid, original_filename, stored_filename, upload_time, size, recovered=0):
 
     db = get_db()
     db.execute("""
@@ -52,17 +54,19 @@ def create_file(file_uuid, original_filename, stored_filename, upload_time, size
                 original_filename,
                 stored_filename,
                 upload_time,
-                size
+                size,
+                recovered
             ) 
             VALUES(
-                ?, ?, ?, ?, ?
+                ?, ?, ?, ?, ?, ?
             )
     """, (
         file_uuid,
         original_filename,
         stored_filename,
         upload_time,
-        size
+        size,
+        recovered
     ))
 
     db.commit()
