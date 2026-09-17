@@ -44,6 +44,11 @@ def close_db(exception=None):
     if db is not None:
         db.close()
 
+def file_uuid_exists(file_uuid) -> bool:
+    db = get_db()
+    results = db.execute("SELECT file_uuid FROM files WHERE file_uuid = ?",(file_uuid,)).fetchone()
+    return results is not None
+
 
 def create_file(file_uuid, original_filename, stored_filename, upload_time, size, recovered=0):
 

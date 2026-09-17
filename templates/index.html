@@ -21,6 +21,9 @@
                 <div class="file-item">
                 <div class="filename">
                     {{file.original_filename}}
+                    {%if file.recovered==1%}
+                    <div class="recovered">⚠ Recovered</div>
+                    {%endif%}
                 </div>
                 <div class="filesize">{{format_size(file.size)}}</div>
                 <form class="fileaction"

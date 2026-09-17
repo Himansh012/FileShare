@@ -24,6 +24,7 @@ def file_name_incrementer(original_filename):
     return original_filename
 
 
+
 def database_filesystem_synchronization():
 
 ## Synchronizes the files that are visible in filesystem but not in database
@@ -46,12 +47,16 @@ def database_filesystem_synchronization():
                 uuid.UUID(file_uuid) ## valid UUID check, if not a valid UUID it returns ValueError
             except ValueError:
                 continue
+            if database.file_uuid_exists(file_uuid):
+                i.unlink()
+                continue
+
             original_filename = parts[1]
             stored_filename = i.name
             file_stats = i.stat()
-            upload_time = "unknown"
+            upload_time = None
             size = file_stats.st_size   
-            database.create_file(file_uuid, original_filename, stored_filename, upload_time, size)
+            database.create_file(file_uuid, original_filename, stored_filename, upload_time, size, recovered=1)
 
     ## Synchronizes the files that are visible in database but not in filesystem
 
