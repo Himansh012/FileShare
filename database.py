@@ -77,7 +77,7 @@ def list_files():
     return db.execute("""
     SELECT * 
     FROM files 
-    ORDER by upload_time DESC;
+    ORDER by recovered DESC, upload_time DESC;
     """).fetchall()
      
 
