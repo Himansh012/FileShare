@@ -19,8 +19,12 @@
         <div class="file-list">
         {% for file in files %}
                 <div class="file-item">
-                <div class="filename">
+                <div class="filename" title="{{file.original_filename}}">
+                    {% if file.original_filename | length > 25 %} 
+                        {{file.original_filename[:25]}}...
+                    {% else %}
                     {{file.original_filename}}
+                    {% endif %}
                     {%if file.recovered==1%}
                     <div class="recovered">⚠ Recovered</div>
                     {%endif%}
