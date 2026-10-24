@@ -12,11 +12,18 @@ routes = Blueprint("routes", __name__)
 
 @routes.route("/")
 def home():
-    files = helper.database_filesystem_synchronization()
+    search_term = request.args.get("search", "").strip()
+
+    if search_term:
+         files = database.search_files(search_term)
+    else:
+        files = helper.database_filesystem_synchronization()
+    
     return render_template(
         "index.html",
         files=files,
-        format_size = helper.format_size
+        format_size = helper.format_size,
+        search_term = search_term
         )
 
 @routes.route("/upload", methods = ["POST"])

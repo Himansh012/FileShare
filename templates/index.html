@@ -15,7 +15,14 @@
     <div class="file-section">
         <h2>Uploaded files </h2>
         {% if files %}  
-        
+        <form action="{{ url_for('routes.home')}}" method="GET">
+            <input type="text" 
+            name="search"
+            placeholder="Search files by filename..."
+            value="{{search_term}}"
+            >
+            <button type="submit">Search</button>
+        </form>
         <div class="file-list">
         {% for file in files %}
                 <div class="file-item">

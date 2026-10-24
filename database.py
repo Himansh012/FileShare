@@ -84,7 +84,15 @@ def list_files():
     FROM files 
     ORDER by recovered DESC, upload_time DESC;
     """).fetchall()
-     
+
+def search_files(search_term):
+    db = get_db()
+    return db.execute("""
+        SELECT *
+        FROM files
+        WHERE original_filename LIKE ?
+        ORDER BY recovered DESC, upload_time DESC
+    """, (f"%{search_term}%",)).fetchall()
 
 def get_file(stored_filename):
 
